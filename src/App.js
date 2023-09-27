@@ -4,12 +4,16 @@ import { Button, Navbar, Container, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import data from './data';
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import Detail from './Detail';
+import styled from 'styled-components';
+import axios from 'axios';
 
 function App() {
 
   let [shoes] = useState(data);
+  let navigate = useNavigate(); //페이지 이동 도와 줌
+
   
 
   return (
@@ -18,16 +22,14 @@ function App() {
         <Container>
           <Navbar.Brand href="#home">REACT SHOP</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link onClick={()=>{ navigate('/') }}href="#home">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Detail</Nav.Link>
-            <Link to="/">홈</Link>
-            <Link to="/detail">상세페이지</Link>
+            <Nav.Link onClick={()=>{ navigate('/detail') }} href="#pricing">Detail</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
 
-<Routes>
+  <Routes>
   <Route path="/" element={
       <div>
       <div className="main-bg"></div>
@@ -44,11 +46,42 @@ function App() {
       </div>
     </div>
   } />
-  <Route path="/detail" element={<div>{ <Detail></Detail> }</div>} />
-  <Route path="/about" element={<div>어바웃페이지</div>} />
-</Routes>
-    </div>
+  <Route path="/detail/:id" element={<div>{ <Detail shoes={shoes}></Detail> }</div>} />
+  
+  <Route path="/about" element={<About />}>
+    <Route path="member" element={<div>멤버임</div>} />
+    <Route path="location" element={<div>위치정보임</div>} />
+  </Route> 
+  <Route path="/event" element={ <EventPage />}>
+    <Route path="one" element={<div>첫 주문 시 양배추즙 서비스</div>} />
+    <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
+  </Route>
+  </Routes>
+  {/* Nested Routes 문법 */}  
+  <button onClick={() => { 
+    axios.get('https://codingapple1.github.io/shop/data2.json')
+    .then((data)=>{ console.log(data) })
+  }}>버튼</button>
+  </div>
   );
+}
+
+function EventPage(){
+  return (
+    <div>
+      <h4>오늘의 이벤트</h4>
+      <Outlet></Outlet>
+    </div>
+  )
+}
+
+function About(){
+  return (
+    <div>
+      <h4>회사정보임</h4>
+      <Outlet></Outlet>
+    </div>
+  )
 }
 
 function Card(props) {
