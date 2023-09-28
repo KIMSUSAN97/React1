@@ -3,11 +3,13 @@ import './App.css';
 import { Button, Navbar, Container, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
-import data from './data';
+import data from './routes/data';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
-import Detail from './Detail';
+import Detail from './routes/Detail';
 import styled from 'styled-components';
 import axios from 'axios';
+import Cart from './routes/Cart';
+
 
 function App() {
 
@@ -56,12 +58,9 @@ function App() {
     <Route path="one" element={<div>첫 주문 시 양배추즙 서비스</div>} />
     <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
   </Route>
+  <Route path="/cart" element={< Cart />} />
   </Routes>
   {/* Nested Routes 문법 */}  
-  <button onClick={() => { 
-    axios.get('https://codingapple1.github.io/shop/data2.json')
-    .then((data)=>{ console.log(data) })
-  }}>버튼</button>
   </div>
   );
 }
@@ -93,6 +92,5 @@ function Card(props) {
     </div>
   )
 }
-
 
 export default App;
